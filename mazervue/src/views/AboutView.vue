@@ -1,19 +1,22 @@
 <template>
-  <Header></Header>
-  <div class="about">
-     <ul v-if="posts && posts.length">
-              <li v-for="(post,counter ) in posts" :key="counter">
-                  <p><strong>{{ post.title }}</strong></p>
-                  <p>{{ post.body }}</p>
-              </li>
-          </ul>
+  <div class="div">
+     <Header></Header>
+    <div class="about">
+       <ul v-if="posts && posts.length">
+                <li v-for="(post, counter ) in posts" :key="counter">
+                    <p><strong>{{ post.title }}</strong></p>
+                    <p>{{ post.body }}</p>
+                </li>
+            </ul>
 
-          <ul v-if="errors && errors.length">
-              <li v-for="(error, counter) in errors" :key="counter">
-                  {{ error.message }}
-              </li>
-          </ul>
+            <ul v-if="errors && errors.length">
+                <li v-for="(error, counter) in errors" :key="counter">
+                    {{ error.message }}
+                </li>
+            </ul>
+    </div>
   </div>
+ 
 </template>
 
 <style>

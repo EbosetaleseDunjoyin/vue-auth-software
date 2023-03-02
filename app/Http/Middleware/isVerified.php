@@ -16,7 +16,7 @@ class isVerified
      */
     public function handle(Request $request, Closure $next): Response
     {
-         if (!auth()->user()->status == 'inactive') {
+         if (!Auth::user()->status == 'inactive') {
             auth()->logout();
             return redirect()->response()
                     ->json([

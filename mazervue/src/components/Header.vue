@@ -14,7 +14,7 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <router-link class="nav-link " aria-current="page" to="/admin">Profile</router-link>
+                                    <router-link class="nav-link " aria-current="page" to="/profile">Profile</router-link>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Buddies</a>
@@ -46,7 +46,7 @@
                 <nav class=" sticky-bottom navbar-expand-lg ">
                     <div class="container">
                         <div class="row bottom-links">
-                            <router-link class="col-3 nav-pill  d-flex flex-column text-center" to="/admin">
+                            <router-link class="col-3 nav-pill  d-flex flex-column text-center" to="/profile">
                            
                                 <a class="nav-link " aria-current="page" ><i class="bi bi-person-fill"></i></a>
                             </router-link>

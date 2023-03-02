@@ -89,12 +89,13 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            $user = User::where('email', $request->email_phone)->orWhere('phone_no' , $request->email_phone)
+            $user = User::with('user_profile')->where('email', $request->email_phone)->orWhere('phone_no' , $request->email_phone)
                 ->first();
 
             return response()->json([
                 'status' => true,
                 'message' => 'User Logged In Successfully',
+                'user' => $user,
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
 
@@ -253,13 +254,12 @@ class AuthController extends Controller
         try {
             $validateUser = Validator::make($request->all(), 
             [
-                'phone_no' => 'required|exists:users,phone_no',
+                'phone_no' => 'required|exists:users',
             ]);
 
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
                     'errors' => $validateUser->errors()
                 ], 422);
             }
@@ -272,21 +272,21 @@ class AuthController extends Controller
 
             //Send mail for verification
             $intTime = strtotime($token->expire_at);
-            $time = $token->expire_at->diffForHumans();
+            $time = Carbon::parse($token->expire_at)->diffForHumans();
            $event = $this->sendOtpSms($token->otp,$time,$request->phone_no);
 
             if($event){
                 return response()->json([
                     'status' => true,
                     'message' => "otp sent ",
-                    'event' => $event
+                    'data' => $user->id
                     
                 ], 200);
             }
             else{
                  return response()->json([
                     'status' => false,
-                    'message' => 'otp not sent',
+                    'errors' => 'otp not sent',
                 ], 400);
             }
 
@@ -310,7 +310,6 @@ class AuthController extends Controller
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
                     'errors' => $validateUser->errors()
                 ], 422);
             }
@@ -319,9 +318,9 @@ class AuthController extends Controller
             $otpVerify = VerificationCode::where('user_id', $request->user_id)
             ->where('otp',$request->otp)->first();
 
-            $user = User::where('id', $request->user_id)->update(['status' => 'active','email_verified_at' => Carbon::now()]);
-
-            if($user && $otpVerify){
+            $userupdate = User::where('id', $request->user_id)->update(['status' => 'active']);
+             $user = User::where('id', $request->user_id)->first();
+            if($userupdate && $otpVerify){
                 return response()->json([
                     'status' => true,
                     'message' => "acccount verified ",
@@ -332,7 +331,7 @@ class AuthController extends Controller
             else{
                  return response()->json([
                     'status' => false,
-                    'message' => 'an issue arised with your otp',
+                    'errors' => 'an issue arised with your otp',
                 ], 400);
             }
 
@@ -414,14 +413,14 @@ class AuthController extends Controller
             if(!$check ){
                  return response()->json([
                     'status' => false,
-                    'message' => "token doesn't",
+                    'message' => "token does not exist",
                     
                 ], 400);
             }
             return response()->json([
                 'status' => true,
                 'message' => "token exists ",
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+                
                 
             ], 200);
             
@@ -488,7 +487,7 @@ class AuthController extends Controller
         if($verificationCode && $now->isBefore($verificationCode->expire_at)){
             return $verificationCode;
         }
-        $verificationCode->delete();
+        
         
 
         $otp = rand(12345, 99999);
@@ -548,6 +547,7 @@ class AuthController extends Controller
         //Any phone number assigned to your API
         $send_from = "+447520651583";
         $phone_no = '+234'.substr($phone_no, 1);
+        // $phone_no = '+234'.substr($phone_no, 1);
         //May be several, separate with a comma ,
         $recipient_phone_numbers = "recipient_phone_numbers"; 
         $message = "Mazer App This is the otp {$token} It expires in {$time}";
@@ -590,40 +590,7 @@ class AuthController extends Controller
         // return file_get_contents($url) ;
         // if(!file_get_contents($url)) {return false;} 
     }
-    // update Username
-    public function updateUsername(Request $request){
-        try{
-            
-            $validateUser = Validator::make($request->all(), 
-            [
-                'user_id' => 'required',
-                'username' => 'required|unique',
-            ]);
-
-            if($validateUser->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'errors' => $validateUser->errors()
-                ], 422);
-            }
-
-            $userprofile = UserProfile::where('user_id', $request->user_id)
-            ->update(['username' => $request->username]);
-
-            if($userprofile){
-                 return response()->json([
-                    'status' => true,
-                    'message' => "username updated ",
-                ], 200);
-            }
-        }catch(\Throwable $th){
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage(),
-            ]);
-        }
-    }
+   
 
     //update email
     public function updateEmail(Request $request){
@@ -632,7 +599,7 @@ class AuthController extends Controller
             $validateUser = Validator::make($request->all(), 
             [
                 'user_id' => 'required',
-                'email' => 'required|unique',
+                'email' => 'required|unique:users',
             ]);
 
             if($validateUser->fails()){
@@ -684,7 +651,7 @@ class AuthController extends Controller
             if($userprofile){
                  return response()->json([
                     'status' => true,
-                    'message' => "email updated ",
+                    'message' => "password updated ",
                 ], 200);
             }
         }catch(\Throwable $th){

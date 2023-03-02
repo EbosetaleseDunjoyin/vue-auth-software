@@ -20,8 +20,9 @@ use App\Http\Controllers\Api\VerificationController;
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
-
 Route::post('/auth/verify-password-token', [AuthController::class, 'verifyPasswordResetToken']);
+Route::put('/auth/reset-password', [AuthController::class, 'resetPassword']);
+
 Route::post('/send-sms-otp', [AuthController::class, 'sendOtp']);
 Route::post('/send-email-otp', [AuthController::class, 'sendverification']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
@@ -38,12 +39,15 @@ Route::get('/loginissues', function (){
 
 Route::post('/auth/reset-password', [AuthController::class, 'resetPassword'])->middleware('auth:sanctum');
 Route::group(['middleware' => ['auth:sanctum','is_verified']], function() {
-    Route::get('/auth/logout', [AuthController::class, 'logoutUser']);
-    Route::get('/user/profile', [UserController::class , 'userProfile']);
     
-    Route::get('/user/update-password', [AuthController::class, 'updatePassword']);
-    Route::get('/user/update-email', [AuthController::class, 'updateEmail']);
-    Route::get('/user/update-username', [AuthController::class, 'updateUsername']);
+    Route::get('/user/profile', [UserController::class , 'userProfile']);
+    Route::put('/user/update-username', [UserController::class, 'updateUsername']);
+    Route::post('/user/create-intrests', [UserController::class, 'createIntrests']);
+    
+    Route::put('/user/update-password', [AuthController::class, 'updatePassword']);
+    Route::put('/user/update-email', [AuthController::class, 'updateEmail']);
+    Route::get('/auth/logout', [AuthController::class, 'logoutUser']);
+    
 });
 
 

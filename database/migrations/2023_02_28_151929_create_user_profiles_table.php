@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->string('username')->unique();
+            $table->foreignId('user_id')->on('users')->onDelete('cascade');
+            $table->string('username')->unique()->nullable();
             $table->longText('intrests');
             $table->timestamps();
         });

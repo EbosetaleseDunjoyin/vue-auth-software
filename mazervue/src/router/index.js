@@ -4,8 +4,12 @@ import LoginView from '../views/auth/LoginView.vue'
 import RegisterView from '../views/auth/RegisterView.vue'
 import ForgotPasswordView from '../views/auth/ForgotPasswordView.vue'
 import Otp from '../views/auth/Otp.vue'
-import MasterView from '../views/MasterView.vue'
+import Logout from '../views/auth/Logout.vue'
+import Onboarding from '../views/auth/Onboarding.vue'
+import ProfileView from '../views/ProfileView.vue'
 import SettingsView from '../views/SettingsView.vue'
+import NotFound from '../views/404.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +25,14 @@ const router = createRouter({
       component: LoginView
     },
     {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
+      meta: {
+        isAuth: true
+      }
+    },
+    {
       path: '/register',
       name: 'register',
       component: RegisterView
@@ -28,7 +40,18 @@ const router = createRouter({
     {
       path: '/otp',
       name: 'otp',
-      component: Otp
+      component: Otp,
+      meta: {
+        isAuth: true
+      }
+    },
+    {
+      path: '/onboarding',
+      name: 'onboarding',
+      component: Onboarding,
+      meta: {
+        isAuth: true
+      }
     },
     {
       path: '/forgot-password',
@@ -36,16 +59,33 @@ const router = createRouter({
       component: ForgotPasswordView
     },
     {
-      path: '/admin',
-      name: 'admin',
-      component: MasterView
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView,
+      meta: {
+        isAuth: true
+      }
     },
     {
       path: '/settings',
       name: 'settings',
-      component: SettingsView
+      component: SettingsView,
+      meta: {
+        isAuth: true
+      }
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      component: NotFound
+    }
   ]
+})
+
+router.beforeEach((to) => {
+  if(to.meta.isAuth && !localStorage.getItem('authtoken')){
+    router.push('/login')
+  }
 })
 
 export default router

@@ -39,37 +39,75 @@ class UserController extends Controller
       
     }
 
-        public function createIntrests(Request $request){
-            try{
-                
-                $validateUser = Validator::make($request->all(), 
-                [
-                    'user_id' => 'required',
-                    'intrests' => 'required',
-                ]);
+    // Create user intrests
+    public function createIntrests(Request $request){
+        try{
+            
+            $validateUser = Validator::make($request->all(), 
+            [
+                'user_id' => 'required',
+                'intrests' => 'required',
+            ]);
 
-                if($validateUser->fails()){
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'validation error',
-                        'errors' => $validateUser->errors()
-                    ], 422);
-                }
-
-                $userprofile = UserProfile::where('user_id', $request->user_id)
-                ->update(['intrests' => $request->intrests]);
-
-                if($userprofile){
-                    return response()->json([
-                        'status' => true,
-                        'message' => "intrests updated ",
-                    ], 200);
-                }
-            }catch(\Throwable $th){
+            if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => $th->getMessage(),
-                ]);
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 422);
             }
+
+            $userprofile = UserProfile::create([
+                'user_id' => $request->user_id,
+                'intrests' => $request->intrests,
+            ]);
+
+            if($userprofile){
+                return response()->json([
+                    'status' => true,
+                    'message' => "user profile created ",
+                ], 200);
+            }
+        }catch(\Throwable $th){
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ]);
         }
+    }
+
+     // update Username
+    public function updateUsername(Request $request){
+        try{
+            
+            $validateUser = Validator::make($request->all(), 
+            [
+                'user_id' => 'required',
+                'username' => 'required|unique:user_profiles',
+            ]);
+
+            if($validateUser->fails()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 422);
+            }
+
+            $userprofile = UserProfile::where('user_id', $request->user_id)
+            ->update(['username' => $request->username]);
+
+            if($userprofile){
+                 return response()->json([
+                    'status' => true,
+                    'message' => "username updated ",
+                ], 200);
+            }
+        }catch(\Throwable $th){
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ]);
+        }
+    }
 }
