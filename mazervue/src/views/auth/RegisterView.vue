@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="number" class="form-control form-control-xl" v-model="phone_no" placeholder="Phone Number">
+                            <input type="text" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control form-control-xl" v-model="phone_no" placeholder="Phone Number">
                             <div class="form-control-icon">
                                 <i class="bi bi-phone"></i>
                             </div>
@@ -68,12 +68,13 @@ export default {
       
     },
     methods: {
+        //pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         registerUser() {
             if (this.email == '' || this.phone_no == '' || this.password == '' ) {
                 this.errors.push('Please check data');
             } else {
                 let email = this.email;
-                let phone_no = this.phone_no;
+                let phone_no = this.phone_no.replace( /[^\d.]/g, '' );
                 let password = this.password;
                 let data = {
                     email: email,
