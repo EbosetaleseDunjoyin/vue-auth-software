@@ -20,7 +20,7 @@
                             <li class="d-inline-block me-2 mb-1" v-for="(intrest,index) in intrestData" :key="index">
                                 <div class="form-check">
                                     <div class="checkbox">
-                                        <input type="checkbox" :id="index" v-model="intrests" class="form-check-input" >
+                                        <input type="checkbox" :id="'checkbox'+index" :value="intrest" v-model="intrests" @change="checklist()" class="form-check-input" >
                                         <label >{{ intrest }}</label>
                                     </div>
                                 </div>
@@ -113,8 +113,20 @@ export default {
                 
             }
         },
-        addIntrests(intrests) {
-            this.intrests.push(intrests);
+        addIntrests(intrest) {
+            
+            if(this.intrests.includes(intrest)){
+                const index = this.intrests.indexOf(intrest);
+                if (index > -1) { // only splice this.intrests when item is found
+                    this.intrests.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }else{
+                this.intrests.push(intrest);
+            }
+            
+            console.log(this.intrests);
+        },
+        checklist(){
             console.log(this.intrests);
         }
     }

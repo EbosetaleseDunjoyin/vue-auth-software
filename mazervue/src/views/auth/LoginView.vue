@@ -88,12 +88,12 @@ export default {
                             }
                            
                         } else {
-                            this.errors.push(res.data.errors)
+                            this.errors.push(res.data.message)
                         }
 
                     })
                     .catch((e) => {
-                        this.errors.push(e);
+                        this.errors.push(e.response.data.message);
                     });
             }
         },

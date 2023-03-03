@@ -93,6 +93,9 @@ export default {
                     // console.log(res.data)
                         this.user = res.data.data
                         this.username = this.user.user_profile.username
+                        if(this.user.user_profile == null){
+                             this.$router.push({ path: '/onboarding', query: { user_id: res.data.user.id, token: res.data.token } })
+                        }
                         this.intrests = JSON.parse(this.user.user_profile.intrests)
 
                         

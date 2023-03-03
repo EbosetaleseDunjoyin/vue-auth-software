@@ -5,6 +5,7 @@ import RegisterView from '../views/auth/RegisterView.vue'
 import ForgotPasswordView from '../views/auth/ForgotPasswordView.vue'
 import Otp from '../views/auth/Otp.vue'
 import Logout from '../views/auth/Logout.vue'
+import VerifyEmail from '../views/auth/VerifyEmail.vue'
 import Onboarding from '../views/auth/Onboarding.vue'
 import ProfileView from '../views/ProfileView.vue'
 import SettingsView from '../views/SettingsView.vue'
@@ -41,22 +42,24 @@ const router = createRouter({
       path: '/otp',
       name: 'otp',
       component: Otp,
-      meta: {
-        isAuth: true
-      }
+      
     },
     {
       path: '/onboarding',
       name: 'onboarding',
       component: Onboarding,
-      meta: {
-        isAuth: true
-      }
+      
     },
     {
       path: '/forgot-password',
       name: 'forgot password',
       component: ForgotPasswordView
+    },
+    {
+      path: '/verify-email/:otp',
+      name: 'verifyEmail',
+      component: VerifyEmail,
+      props:true
     },
     {
       path: '/profile',

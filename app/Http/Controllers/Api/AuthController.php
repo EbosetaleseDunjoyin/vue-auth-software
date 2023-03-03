@@ -75,8 +75,7 @@ class AuthController extends Controller
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'message' => $validateUser->errors()
                 ], 422);
             }
              $fieldType = filter_var($request->email_phone, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_no';
@@ -373,6 +372,7 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => "acccount verified ",
+                    'user_id' => $user->id,
                     'token'  => $user->createToken("API TOKEN")->plainTextToken
                     
                 ], 200);
