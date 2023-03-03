@@ -1,13 +1,13 @@
-This application was built with VUE and Laravel api
-The vue project is in the mazervue folder
+This application was built with VUE and Laravel api<br>
+The vue project is in the mazervue folder<br>
 
-run     npm install & npm run dev
+run     npm install & npm run dev <br>
 
-For the laravel application 
-create an env file with prefered mailing details(Mailtrap)
+For the laravel application <br>
+create an env file with prefered mailing details(Mailtrap)<br>
 
-run composer install
-    php artisan key:generate
-    php artisan migrate
+run composer install<br>
+    php artisan key:generate <br>
+    php artisan migrate <br>
   
     
