@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control form-control-xl" v-model="phone_no" placeholder="Phone Number">
+                            <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control form-control-xl" v-model="phone_no" maxlength="11" placeholder="Phone Number - 09076543832">
                             <div class="form-control-icon">
                                 <i class="bi bi-phone"></i>
                             </div>
